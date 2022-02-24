@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head th:replace="admin/_fragments :: head(~{::title})">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,7 +12,7 @@
 
 <body>
     <!-- #nav-->
-    <nav th:replace="admin/_fragments :: menu(1)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <nav th:replace="admin/_fragments :: menu(0)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
         <div class="ui container">
             <div class="ui inverted secondary stackable menu">
                 <h2 class="ui teal header item">Management</h2 >
@@ -26,7 +27,7 @@
                         </div>
                         <i class="dropdown icon"></i>
                         <div class="menu">
-                            <a href="#" class="item">Log out</a>
+                            <a href="#" th:href="@{/admin/logout}" class="item">Log out</a>
                         </div>
                     </div>
                 </div>
@@ -36,82 +37,15 @@
             <i class="sidebar icon"></i>
         </a>
     </nav>
-    <div class="ui attached pointing menu">
-        <div class="ui container">
-            <div class="right menu">
-                <a href="#" class="item">Submit</a>
-                <a href="#" class="active teal item">List</a>
-            </div>  
-        </div>
-    </div>
+
     <!-- #content# -->
     <div class="m-container-small m-padded-tb-big">
         <div class="ui container">
-            <form action="#" class="ui segment form" method="post">
-                <div class="inline fields">
-                    <div class="field">
-                        <input type="text" name="title" placeholder="Title">
-                    </div>
-                    <div class="field">
-                        <div class="ui selection dropdown">
-                            <input type="hidden" name="type">
-                            <i class="dropdown icon"></i>
-                            <div class="default text">Category</div>
-                            <div class="menu">
-                                <div class="item" data-value="1">Error</div>
-                                <div class="item" data-value="2">Dev Log</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui checkbox">
-                            <input type="checkbox" id="recommend" name="recommend">
-                            <label for="recommend">Recommend</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <button class="ui mini teal basic button"><i class="search icon"></i>Search</button>
-                    </div>
-                </div>
-            </form>
-            <table class="ui celled table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Titile</th>
-                        <th>Categoty</th>
-                        <th>Recommend</th>
-                        <th>Update time</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>XXX</td>
-                        <td>XXX</td>
-                        <td>Yes</td>
-                        <td>XXX</td>
-                        <td>
-                            <a href="#" class="ui mini teal basic button">Edit</a>
-                            <a href="#" class="ui mini red basic button">Delete</a>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="6">
-                            <div class="ui mini pagination menu">
-                                <div class="ui mini pagination menu">
-                                    <a class="item">Previous</a>
-                                    <a class="item">Next</a>
-                                </div>
-                            </div>
-                            <a href="#" class="ui right floated mini teal basic button">New</a>
-                        </th>
-                    </tr>
-                </tfoot>
-            </table>
+           <div class="ui success large message">
+               <h3>Hi,</h3>
+               <p>Welcome,Bai!</p>
+           </div>
+            <img src="https://picsum.photos/id/1/1000/400?image=10" alt="" class="ui rounded bordered fluid image">
         </div>
     </div>
     <!-- #footer -->
@@ -147,11 +81,11 @@
         </div>
 
     </footer>
-
     <!--/*/<th:block th:replace="_fragments :: script">/*/-->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     <!--/*/</th:block>/*/-->
+
     <script>
         $('.menu.toggle').click(function (){
             $('.m-item').toggleClass('m-mobile-hide');
