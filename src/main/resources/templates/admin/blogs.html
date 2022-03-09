@@ -47,7 +47,8 @@
     <!-- #content# -->
     <div class="m-container-small m-padded-tb-big">
         <div class="ui container">
-            <form action="#" class="ui segment form" method="post">
+            <div class="ui secondary segment form">
+                <input type="hidden" name="page">
                 <div class="inline fields">
                     <div class="field">
                         <input type="text" name="title" placeholder="Title">
@@ -58,8 +59,10 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Category</div>
                             <div class="menu">
-                                <div class="item" data-value="1">Error</div>
-                                <div class="item" data-value="2">Dev Log</div>
+                                <div th:each="type : ${types}" class="item" data-value="1" th:data-value="${type.id}" th:text="${type.name}">Error</div>
+                                <!--/*-->
+                                <div class="item" data-value="2">Log</div>
+                                <!--*/-->
                             </div>
                         </div>
                     </div>
@@ -70,48 +73,55 @@
                         </div>
                     </div>
                     <div class="field">
-                        <button class="ui mini teal basic button"><i class="search icon"></i>Search</button>
+                        <button type="button" id="search-btn" class="ui mini teal basic button"><i class="search icon"></i>Search</button>
                     </div>
                 </div>
-            </form>
-            <table class="ui celled table">
-                <thead>
+            </div>
+            <div id="table-container">
+                <table th:fragment="blogList" class="ui compact teal table">
+                    <thead>
                     <tr>
                         <th></th>
-                        <th>Titile</th>
-                        <th>Categoty</th>
+                        <th>Title</th>
+                        <th>Category</th>
                         <th>Recommend</th>
                         <th>Update time</th>
                         <th>Action</th>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>XXX</td>
-                        <td>XXX</td>
-                        <td>Yes</td>
-                        <td>XXX</td>
+                    </thead>
+                    <tbody>
+                    <tr th:each="blog, iterStat : ${page.content}">
+                        <td th:text="${iterStat.count}">1</td>
+                        <td th:text="${blog.title}">title</td>
+                        <td th:text="${blog.type.name}">types</td>
+                        <td th:text="${blog.recommend? 'Yes' : 'No'}">Yes</td>
+                        <td th:text="${blog.updateTime}">2020-02-02</td>
                         <td>
-                            <a href="#" class="ui mini teal basic button">Edit</a>
-                            <a href="#" class="ui mini red basic button">Delete</a>
+                            <a href="#" th:href="@{/admin/blogs/{id}/input(id=${blog.id})}" class="ui mini teal basic button">Edit</a>
+                            <a href="#" th:href="@{/admin/blogs/{id}/delete(id=${blog.id})}" class="ui mini red basic button">Delete</a>
                         </td>
                     </tr>
-                </tbody>
-                <tfoot>
+                    </tbody>
+                    <tfoot>
                     <tr>
                         <th colspan="6">
-                            <div class="ui mini pagination menu">
-                                <div class="ui mini pagination menu">
-                                    <a class="item">Previous</a>
-                                    <a class="item">Next</a>
-                                </div>
+                            <div class="ui mini pagination menu" th:if="${page.totalPages} > 1">
+
+                                <a onclick="page(this)" th:attr="data-page=${page.number}-1" class="icon item" th:unless="${page.first}">
+                                    <i class="left chevron icon"></i>
+                                </a>
+                                <a onclick="page(this)" th:attr="data-page=${page.number}+1" class="icon item" th:unless="${page.last}">
+                                    <i class="right chevron icon"></i>
+                                </a>
+
                             </div>
                             <a href="#" class="ui right floated mini teal basic button">New</a>
                         </th>
                     </tr>
-                </tfoot>
-            </table>
+                    </tfoot>
+                </table>
+            </div>
+
         </div>
     </div>
     <!-- #footer -->
@@ -148,11 +158,30 @@
 
     </footer>
 
-    <!--/*/<th:block th:replace="_fragments :: script">/*/-->
+    <!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     <!--/*/</th:block>/*/-->
     <script>
+        function page(obj) {
+            $("[name='page']").val($(obj).data("page"));
+            loaddata();
+        }
+
+        $("#search-btn").click(function () {
+            $("[name='page']").val(0);
+            loaddata();
+        });
+
+        function loaddata() {
+            $("#table-container").load(/*[[@{/admin/blogs/search}]]*/"/admin/blogs/search",{
+                title : $("[name='title']").val(),
+                typeId : $("[name='typeId']").val(),
+                recommend : $("[name='recommend']").prop('checked'),
+                page : $("[name='page']").val()
+            });
+        }
+
         $('.menu.toggle').click(function (){
             $('.m-item').toggleClass('m-mobile-hide');
         });
